@@ -23,7 +23,11 @@ pub struct Caption {
     /// captions require a deepgram API key
     #[clap(env, long)]
     deepgram_api_key: String,
+    /// captions language if not englist
+    #[clap(env, short, long)]
+    deepgram_lang: String,
     /// A path to an audio file or a URL
+    /// https://github.com/deepgram-devs/deepgram-rust-sdk/blob/main/src/transcription/prerecorded/options.rs
     #[clap(short, long, value_parser)]
     input: String,
     /// a filepath to use for the output.
@@ -117,6 +121,39 @@ impl From<DeepgramError> for CaptionError {
     }
 }
 
+pub fn str2langopt(lang: &str) -> Language {
+    match lang {
+        "zh" => Language::zh,
+        "zh_CN" => Language::zh_CN,
+        "zh_TW" => Language::zh_TW,
+        "nl" => Language::nl,
+        "en" => Language::en,
+        "en_AU" => Language::en_AU,
+        "en_GB" => Language::en_GB,
+        "en_IN" => Language::en_IN,
+        "en_NZ" => Language::en_NZ,
+        "en_US" => Language::en_US,
+        "fr" => Language::fr,
+        "fr_CA" => Language::fr_CA,
+        "de" => Language::de,
+        "hi" => Language::hi,
+        "hi_Latn" => Language::hi_Latn,
+        "id" => Language::id,
+        "it" => Language::it,
+        "ja" => Language::ja,
+        "ko" => Language::ko,
+        "pt" => Language::pt,
+        "pt_BR" => Language::pt_BR,
+        "ru" => Language::ru,
+        "es" => Language::es,
+        "es_419" => Language::es_419,
+        "sv" => Language::sv,
+        "tr" => Language::tr,
+        "uk" => Language::uk,
+        _ => Language::en
+    }
+}
+
 pub async fn generate_captions(
     options: &Caption,
 ) -> Result<(), CaptionError> {
@@ -201,7 +238,7 @@ pub async fn generate_captions(
 
     let deepgram_options = Options::builder()
         .punctuate(true)
-        .language(Language::en_US)
+        .language(str2langopt(&options.deepgram_lang))
         .utterances(true)
         .build();
 

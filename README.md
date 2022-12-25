@@ -22,6 +22,8 @@ USAGE:
 OPTIONS:
         --deepgram-api-key <DEEPGRAM_API_KEY>
             captions require a deepgram API key
+    -d, --deepgram-lang <DEEPGRAM_LANG>
+            captions language if not english(en_US)
 
     -h, --help
             Print help information
